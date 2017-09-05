@@ -2,44 +2,11 @@
 # -x- coding: utf-8 -*-
 
 import os
-import Cursada
-import Organizador
-import Materia
 from termcolor import colored
-
+from Organizador import Organizador
 
 def cls():
     os.system('cls' if os.name == 'nt' else 'clear')
-
-
-def consultaPromedio():
-    print("Consulta de Promedio")
-    input("Presione Enter para continuar")
-
-
-def consultaCreditos():
-    print("Consulta de Creditos")
-    input("Presione Enter para continuar")
-
-
-def consultaMateriasCursables():
-    print("Consulta de Materias Cursables")
-    input("Presione Enter para continuar")
-
-
-def consultaEstadoCarrera():
-    print("Consulta de Estado Carrera")
-    input("Presione Enter para continuar")
-
-
-def aprobar():
-    print("Aprobar materia")
-    input("Presione Enter para continuar")
-
-
-def aplazar():
-    print("Aplazar materia")
-    input("Presione Enter para continuar")
 
 
 def menu(scheduler):
@@ -59,6 +26,7 @@ def menu(scheduler):
         elif (option == "2"):
             menuCargar(scheduler)
         elif (option == "3"):
+            scheduler.save()
             exit = True
         else:
             invalid = True
@@ -130,5 +98,5 @@ def showMenuCargar():
     print("2. Aplazo")
     print("3. Volver")
 
-scheduler = Organizador('Organizador/plan.csv', 'Organizador/config.csv')
+scheduler = Organizador("data/plan_test.csv", "data/config.csv")
 menu(scheduler)
