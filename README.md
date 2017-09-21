@@ -1,2 +1,2 @@
-# Organizador
+# OrganizadorFIUBA
 Organizador de Materias FIUBA
