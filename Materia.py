@@ -21,34 +21,55 @@ class Materia:
         return self.codigo
 
 
-    def esCursable(self, aprobadas):
-        cursable = True
-        if (len(aprobadas) == 0): return cursable
+    def esCursable(self, cursadas, creditos):
+        if (len(self.correlativas) == 0): return True
+        if (len(cursadas) == 0): return False
+
+        if "créditos" in self.correlativas[0]:
+            pedidos =  int(self.correlativas[0].rsplit(' ',1)[0])
+            if creditos > pedidos:
+                return True
+
         for materia in self.correlativas:
             aprobada = False
             i = 0
-            while (not aprobada and i < len(self.correlativas)):
-                if materia == self.correlativas[i].pedirCodigo():
+
+            while (not aprobada and i < len(cursadas)):
+                if ((materia == cursadas[i].pedirCodigo()) & (cursadas[i].pedirNota() >= 4)):
                     aprobada = True
                 i += 1
-            if aprobada == False:
-                cursable = False
-        return cursable
+            if (not aprobada): return False
+
+        return True
+
+
+    def esCBC(self):
+        return (self.cuatrimestre is "CBC")
 
 
     def cerrar(self, nota):
-        return Cerrada(self.cuatrimestre, self.orientacion, self.opcion, self.correlativas, self.nombre, self.creditos, self.correlativas, nota)
+        return Cerrada(self.cuatrimestre, self.orientacion, self.opcion, self.codigo, self.nombre, self.creditos, self.correlativas, nota)
 
 
 
 class Cerrada(Materia):
     def __init__(self, cuatrimestre, orientacion, opcion, codigo, nombre, creditos, correlativas, nota):
-        Materia.__init__(cuatrimestre, orientacion, opcion, codigo, nombre, creditos, correlativas)
+        super().__init__(cuatrimestre, orientacion, opcion, codigo, nombre, creditos, correlativas)
         self.nota = nota
+
 
     def pedirNota(self):
         return self.nota
 
+
     def save(self):
-        return self.cuatrimestre + ',' + self.orientacion + ',' + self.opcion + ',' + self.correlativas + ',' + self.nombre + ',' + \
-               str(self.creditos) + ',' + self.correlativas + ',' + str(self.nota)
+        correl = ''
+        if (len(self.correlativas) != 0):
+            for materia in self.correlativas:
+                correl += (materia + '-')
+                correl = correl[:-1]
+        return ((self.codigo,str(self.nota)))
+
+
+    def estaAprobada(self):
+        return (self.nota >= 4)
