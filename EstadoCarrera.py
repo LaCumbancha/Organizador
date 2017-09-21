@@ -39,7 +39,7 @@ class EstadoCarrera(object):
         print('+' * 91 + '\n')
 
 
-    def printCuatrimestre(self, cuatri):
+    def printCuatrimestre(self, cuatri, credsOptativas = 0):
         materias = self.cursada.finalCuatrimestre(cuatri)
 
         for materia in materias:
@@ -48,9 +48,50 @@ class EstadoCarrera(object):
             else:
                 color = 'red'
 
-            print('|' + ' ' * int(ceil((8 - len(materia.pedirCodigo()))/2)) + colored(materia.pedirCodigo(),color) +
-                  ' ' * int(floor((8 - len(materia.pedirCodigo))/2)) +  '| ' + colored(materia.pedirNombre().upper(),color) +
-                  ' ' * (72 - len(materia.pedirNombre)) + '|' + ' ' * int(ceil(6 - len(str(materia.pedirNota())))) + str(materia.pedirNota()) +
-                  ' ' * int(floor(6 - len(str(materia.pedirNota())))) * '|')
+            if materia.pedirNombre().upper() == "OPTATIVAS":
+                credsNecesarios = materia.pedirCreditos()
+
+                if credsNecesarios <= credsOptativas:
+                    color = 'white'
+                else:
+                    color = 'red'
+
+                print("|        | " + colored("OPTATIVAS",color) + " " * 63 + "|  " + colored("**",color) + "  |")
+
+                credsOptativas -= credsNecesarios
+
+            else:
+
+                print('|' + ' ' * int(ceil((8 - len(materia.pedirCodigo()))/2)) + colored(materia.pedirCodigo(),color) +
+                      ' ' * int(floor((8 - len(materia.pedirCodigo))/2)) +  '| ' + colored(materia.pedirNombre().upper(),color) +
+                      ' ' * (72 - len(materia.pedirNombre)) + '|' + ' ' * int(ceil(6 - len(str(materia.pedirNota())))) + str(materia.pedirNota()) +
+                      ' ' * int(floor(6 - len(str(materia.pedirNota())))) + '|')
 
         print('-' * 91)
+
+
+    def printOptativas(self):
+        print('+' * 91)
+        print('|' + ' ' * 40 + 'OPTATIVAS' + ' ' * 40 + '|')
+        print('+' * 91)
+        if self.cursada.creditosOptativos() > 0:
+            print('-' * 91)
+            print('| CODIGO | MATERIA' + ' ' * 65 + '| NOTA |')
+            print('-' * 91)
+
+            for materia in self.cursada.aprobadasObtativas():
+                if materia.pedirNota() >= 4:
+                    color = 'white'
+                else:
+                    color = 'red'
+
+                print('|' + ' ' * int(ceil((8 - len(materia.pedirCodigo())) / 2)) + colored(materia.pedirCodigo(),color) +
+                      ' ' * int(floor((8 - len(materia.pedirCodigo)) / 2)) + '| ' + colored(materia.pedirNombre().upper(), color) +
+                      ' ' * (72 - len(materia.pedirNombre)) + '|' + ' ' * int(ceil(6 - len(str(materia.pedirNota())))) + str(materia.pedirNota()) +
+                      ' ' * int(floor(6 - len(str(materia.pedirNota())))) + '|')
+        else:
+            print("|" + " " * 89 + "|")
+            print("| AÚN NO TIENES MATERIAS OPTATIVAS CURSADAS" + "" * 47 + "|")
+            print("|" + " " * 89 + "|")
+
+        print('+' * 91 + '\n')
