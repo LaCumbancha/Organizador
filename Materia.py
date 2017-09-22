@@ -22,8 +22,8 @@ class Materia:
 
 
     def esCursable(self, cursadas, creditos):
-        if (len(self.correlativas) == 0): return True
-        if (len(cursadas) == 0): return False
+        if len(self.correlativas) == 0: return True
+        if len(cursadas) == 0: return False
 
         if "créditos" in self.correlativas[0]:
             pedidos =  int(self.correlativas[0].rsplit(' ',1)[0])
@@ -34,21 +34,36 @@ class Materia:
             aprobada = False
             i = 0
 
-            while (not aprobada and i < len(cursadas)):
-                if ((materia == cursadas[i].pedirCodigo()) & (cursadas[i].pedirNota() >= 4)):
+            while not aprobada and i < len(cursadas):
+                if (materia == cursadas[i].pedirCodigo()) & (cursadas[i].pedirNota() >= 4):
                     aprobada = True
                 i += 1
-            if (not aprobada): return False
+            if not aprobada: return False
 
         return True
 
 
     def esCBC(self):
-        return (self.cuatrimestre is "CBC")
+        return self.cuatrimestre == "1C" or self.cuatrimestre == "2C"
+
+
+    def esOptativa(self):
+        return self.cuatrimestre == "OPT"
 
 
     def cerrar(self, nota):
         return Cerrada(self.cuatrimestre, self.orientacion, self.opcion, self.codigo, self.nombre, self.creditos, self.correlativas, nota)
+
+
+    def pedirCuatrimestre(self):
+        if self.cuatrimestre == "OPT":
+            return -1
+        return int(self.cuatrimestre[:-1])
+
+
+
+    def pedirNota(self):
+        return ""
 
 
 
@@ -64,12 +79,12 @@ class Cerrada(Materia):
 
     def save(self):
         correl = ''
-        if (len(self.correlativas) != 0):
+        if len(self.correlativas) != 0:
             for materia in self.correlativas:
                 correl += (materia + '-')
                 correl = correl[:-1]
-        return ((self.codigo,str(self.nota)))
+        return self.codigo, str(self.nota)
 
 
     def estaAprobada(self):
-        return (self.nota >= 4)
+        return self.nota >= 4
