@@ -1,5 +1,5 @@
-# OrgFI
-Organizador de Materias FIUBA
+# Fiuborg
+FIUBA Scheduler, developed in Python 3.6, will help organizing available subjects, current grades and the academic history.
+Storyboard: [Fiuborg's Trello](https://trello.com/b/iGxzabai/fiuborg)
 
->> Python 3.6
-Developped by Cristian Rana
+> Developed by Cristian Raña
