@@ -24,7 +24,7 @@ def cargarPlan(route):
     return plan
 
 
-class Organizador:
+class Organizer:
 
 
     def __init__(self, plan, config):
